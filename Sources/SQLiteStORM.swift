@@ -17,11 +17,11 @@ open class SQLiteStORM: StORM {
 		return "unset"
 	}
 
-	override init() {
+	override public init() {
 		super.init()
 	}
 
-	init(_ connect: SQLiteConnect) {
+	public init(_ connect: SQLiteConnect) {
 		super.init()
 		self.connection = connect
 	}
