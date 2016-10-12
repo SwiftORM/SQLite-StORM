@@ -21,7 +21,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [String(id)])
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 		return true
@@ -33,7 +33,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [id])
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 		return true
@@ -45,7 +45,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [id.string])
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 		return true

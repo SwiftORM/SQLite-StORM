@@ -17,7 +17,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idname), params: [String(describing: idval)])
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
@@ -27,7 +27,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idname), params: [String(describing: id)])
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
@@ -64,7 +64,7 @@ extension SQLiteStORM {
 		do {
 			try select(whereclause: set.joined(separator: " AND "), params: paramsString, orderby: [idname])
 		} catch {
-			print("Error detacted: \(error)")
+			print("Error detected: \(error)")
 		}
 		
 	}

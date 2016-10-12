@@ -23,13 +23,13 @@ extension SQLiteStORM {
 		do {
 			return try insert(cols: keys, params: vals)
 		} catch {
-			throw StORMError.error(error as! String)
+			throw StORMError.error(String(describing: error))
 		}
 	}
 
 	public func insert(cols: [String], params: [Any]) throws -> Any {
 
-		// PostgreSQL specific insert staement exec
+		// SQLite specific insert statement exec
 		var paramString = [String]()
 		var substString = [String]()
 		for i in 0..<params.count {
@@ -37,11 +37,10 @@ extension SQLiteStORM {
 			substString.append(":\(i+1)")
 		}
 		let str = "INSERT INTO \(self.table()) (\(cols.joined(separator: ","))) VALUES(\(substString.joined(separator: ",")))"
-
 		do {
 			return try execReturnID(str, params: paramString)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 		

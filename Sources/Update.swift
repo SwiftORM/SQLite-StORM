@@ -27,7 +27,7 @@ extension SQLiteStORM {
 		do {
 			try exec(str, params: paramsString)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 
@@ -46,7 +46,7 @@ extension SQLiteStORM {
 		do {
 			return try update(cols: keys, params: vals, idName: idName, idValue: idValue)
 		} catch {
-			throw StORMError.error(error as! String)
+			throw StORMError.error(String(describing: error))
 		}
 	}
 	

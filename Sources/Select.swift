@@ -31,7 +31,7 @@ extension SQLiteStORM {
 					groupBy: groupBy
 			)
 		} catch {
-			throw StORMError.error(error as! String)
+			throw StORMError.error(String(describing: error))
 		}
 	}
 
@@ -109,7 +109,7 @@ extension SQLiteStORM {
 
 			//return results
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}

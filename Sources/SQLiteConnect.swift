@@ -33,7 +33,7 @@ open class SQLiteConnect: StORMConnect {
 			//			}
 			return db
 		} catch {
-			throw StORMError.error(error as! String)
+			throw StORMError.error(String(describing: error))
 		}
 	}
 	public func close(_ db: SQLite) {
