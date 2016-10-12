@@ -57,6 +57,17 @@ open class SQLiteStORM: StORM {
 		}
 	}
 
+	@discardableResult
+	func execStatement(_ smt: String) throws {
+		do {
+			let db = try self.connection.open()
+
+			try db.execute(statement: smt)
+		} catch {
+			throw StORMError.error(errorMsg)
+		}
+	}
+	
 
 	// Internal function which executes statements, with parameter binding
 	// Returns an array of SQLiteStmt
