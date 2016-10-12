@@ -55,6 +55,7 @@ open class SQLiteStORM: StORM {
 			self.connection.close(db)
 			return db.lastInsertRowID()
 		} catch {
+			print(error)
 			throw StORMError.error(errorMsg)
 		}
 	}
@@ -89,8 +90,9 @@ open class SQLiteStORM: StORM {
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
 				results.append(statement)
 			})
-			self.connection.close(db)
-
+			defer {
+				self.connection.close(db)
+			}
 		} catch {
 			throw StORMError.error(errorMsg)
 		}
@@ -102,8 +104,32 @@ open class SQLiteStORM: StORM {
 	@discardableResult
 	func execRows(_ smt: String, params: [String]) throws -> [StORMRow] {
 		var rows = [StORMRow]()
-		let results = try exec(smt, params: params)
-		rows = parseRows(results)
+//		let results = try exec(smt, params: params)
+//		print(results[0].columnCount())
+//		rows = parseRows(results)
+
+		do {
+			let db = try self.connection.open()
+
+			try db.forEachRow(statement: smt, doBindings: {
+
+				(statement: SQLiteStmt) -> () in
+				for i in 0..<params.count {
+					try statement.bind(position: i+1, params[i])
+				}
+
+			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
+				rows.append(parseRow(statement))
+//				print(statement.columnCount())
+//				results.append(statement)
+			})
+			defer {
+				self.connection.close(db)
+			}
+		} catch {
+			throw StORMError.error(errorMsg)
+		}
+
 		return rows
 	}
 
