@@ -16,7 +16,7 @@ extension SQLiteStORM {
 		do {
 			try execStatement(statement)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
@@ -26,7 +26,7 @@ extension SQLiteStORM {
 		do {
 			return try exec(statement, params: params)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
@@ -36,7 +36,7 @@ extension SQLiteStORM {
 		do {
 			return try execReturnID(statement, params: params)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
@@ -46,7 +46,7 @@ extension SQLiteStORM {
 		do {
 			return try execRows(statement, params: params)
 		} catch {
-			self.error = StORMError.error(error as! String)
+			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
