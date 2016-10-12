@@ -50,5 +50,5 @@ extension SQLiteStORM {
 			throw error
 		}
 	}
-
+	
 }

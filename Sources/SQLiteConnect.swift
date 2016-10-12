@@ -28,13 +28,16 @@ open class SQLiteConnect: StORMConnect {
 	public func open() throws -> SQLite {
 		do {
 			let db = try SQLite(self.database)
-			defer {
-				db.close() // This makes sure we close our connection.
-			}
+			//			defer {
+			//				db.close() // This makes sure we close our connection.
+			//			}
 			return db
 		} catch {
 			throw StORMError.error(error as! String)
 		}
+	}
+	public func close(_ db: SQLite) {
+		db.close() // This makes sure we close our connection.
 	}
 }
 
