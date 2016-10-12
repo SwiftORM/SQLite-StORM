@@ -72,6 +72,7 @@ extension SQLiteStORM {
 			clauseOrder = " ORDER BY \(orderby.joined(separator: ", "))"
 		}
 		do {
+			//print("EXEC: SELECT \(clauseCount) FROM \(table()) \(clauseWhere)")
 			let getCount = try execRows("SELECT \(clauseCount) FROM \(table()) \(clauseWhere)", params: paramsString)
 			let numrecords = getCount.first?.data["counter"]! as? Int ?? 0
 			results.cursorData = StORMCursor(
@@ -93,6 +94,7 @@ extension SQLiteStORM {
 				str += " OFFSET \(cursor.offset)"
 			}
 
+			//print("EXEC: \(str)")
 			// save results into ResultSet
 			results.rows = try execRows(str, params: paramsString)
 
