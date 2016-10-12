@@ -32,6 +32,7 @@ open class SQLiteStORM: StORM {
 		do {
 			let db = try self.connection.open()
 			try db.execute(statement: smt)
+			self.connection.close(db)
 		} catch {
 			throw StORMError.error(errorMsg)
 		}
@@ -51,6 +52,7 @@ open class SQLiteStORM: StORM {
 					try statement.bind(position: i, params[i])
 				}
 			})
+			self.connection.close(db)
 			return db.lastInsertRowID()
 		} catch {
 			throw StORMError.error(errorMsg)
@@ -61,13 +63,13 @@ open class SQLiteStORM: StORM {
 	func execStatement(_ smt: String) throws {
 		do {
 			let db = try self.connection.open()
-
 			try db.execute(statement: smt)
+			self.connection.close(db)
 		} catch {
-			throw StORMError.error(errorMsg)
+			throw StORMError.error(String(describing: error))
 		}
 	}
-	
+
 
 	// Internal function which executes statements, with parameter binding
 	// Returns an array of SQLiteStmt
@@ -87,6 +89,7 @@ open class SQLiteStORM: StORM {
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
 				results.append(statement)
 			})
+			self.connection.close(db)
 
 		} catch {
 			throw StORMError.error(errorMsg)
@@ -105,53 +108,53 @@ open class SQLiteStORM: StORM {
 	}
 
 	open func to(_ this: StORMRow) {
-//		id				= this.data["id"] as! Int
-//		firstname		= this.data["firstname"] as! String
-//		lastname		= this.data["lastname"] as! String
-//		email			= this.data["email"] as! String
+		//		id				= this.data["id"] as! Int
+		//		firstname		= this.data["firstname"] as! String
+		//		lastname		= this.data["lastname"] as! String
+		//		email			= this.data["email"] as! String
 	}
 
 	open func makeRow() {
 		self.to(self.results.rows[0])
 	}
 
-//	@discardableResult
-//	open func save() throws {
-//		do {
-//			if keyIsEmpty() {
-//				try insert(asData(1))
-//			} else {
-//				let (idname, idval) = firstAsKey()
-//				try update(data: asData(1), idName: idname, idValue: idval)
-//			}
-//		} catch {
-//			throw StORMError.error(error.localizedDescription)
-//		}
-//	}
-//	@discardableResult
-//	open func save(set: (_ id: Any)->Void) throws {
-//		do {
-//			if keyIsEmpty() {
-//				let setId = try insert(asData(1))
-//				set(setId)
-//			} else {
-//				let (idname, idval) = firstAsKey()
-//				try update(data: asData(1), idName: idname, idValue: idval)
-//			}
-//		} catch {
-//			throw StORMError.error(error.localizedDescription)
-//		}
-//	}
-//
-//	@discardableResult
-//	override open func create() throws {
-//		do {
-//			try insert(asData())
-//		} catch {
-//			throw StORMError.error(error.localizedDescription)
-//		}
-//	}
-//
+	//	@discardableResult
+	//	open func save() throws {
+	//		do {
+	//			if keyIsEmpty() {
+	//				try insert(asData(1))
+	//			} else {
+	//				let (idname, idval) = firstAsKey()
+	//				try update(data: asData(1), idName: idname, idValue: idval)
+	//			}
+	//		} catch {
+	//			throw StORMError.error(error.localizedDescription)
+	//		}
+	//	}
+	//	@discardableResult
+	//	open func save(set: (_ id: Any)->Void) throws {
+	//		do {
+	//			if keyIsEmpty() {
+	//				let setId = try insert(asData(1))
+	//				set(setId)
+	//			} else {
+	//				let (idname, idval) = firstAsKey()
+	//				try update(data: asData(1), idName: idname, idValue: idval)
+	//			}
+	//		} catch {
+	//			throw StORMError.error(error.localizedDescription)
+	//		}
+	//	}
+	//
+	//	@discardableResult
+	//	override open func create() throws {
+	//		do {
+	//			try insert(asData())
+	//		} catch {
+	//			throw StORMError.error(error.localizedDescription)
+	//		}
+	//	}
+	//
 }
 
 
