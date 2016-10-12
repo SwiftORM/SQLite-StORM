@@ -49,7 +49,7 @@ open class SQLiteStORM: StORM {
 
 				(statement: SQLiteStmt) -> () in
 				for i in 0..<params.count {
-					try statement.bind(position: i, params[i])
+					try statement.bind(position: i+1, params[i])
 				}
 			})
 			self.connection.close(db)
@@ -83,7 +83,7 @@ open class SQLiteStORM: StORM {
 
 				(statement: SQLiteStmt) -> () in
 				for i in 0..<params.count {
-					try statement.bind(position: i, params[i])
+					try statement.bind(position: i+1, params[i])
 				}
 
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
@@ -118,43 +118,43 @@ open class SQLiteStORM: StORM {
 		self.to(self.results.rows[0])
 	}
 
-	//	@discardableResult
-	//	open func save() throws {
-	//		do {
-	//			if keyIsEmpty() {
-	//				try insert(asData(1))
-	//			} else {
-	//				let (idname, idval) = firstAsKey()
-	//				try update(data: asData(1), idName: idname, idValue: idval)
-	//			}
-	//		} catch {
-	//			throw StORMError.error(error.localizedDescription)
-	//		}
-	//	}
-	//	@discardableResult
-	//	open func save(set: (_ id: Any)->Void) throws {
-	//		do {
-	//			if keyIsEmpty() {
-	//				let setId = try insert(asData(1))
-	//				set(setId)
-	//			} else {
-	//				let (idname, idval) = firstAsKey()
-	//				try update(data: asData(1), idName: idname, idValue: idval)
-	//			}
-	//		} catch {
-	//			throw StORMError.error(error.localizedDescription)
-	//		}
-	//	}
-	//
-	//	@discardableResult
-	//	override open func create() throws {
-	//		do {
-	//			try insert(asData())
-	//		} catch {
-	//			throw StORMError.error(error.localizedDescription)
-	//		}
-	//	}
-	//
+
+	@discardableResult
+	open func save() throws {
+		do {
+			if keyIsEmpty() {
+				try insert(asData(1))
+			} else {
+				let (idname, idval) = firstAsKey()
+				try update(data: asData(1), idName: idname, idValue: idval)
+			}
+		} catch {
+			throw StORMError.error(String(describing: error))
+		}
+	}
+	@discardableResult
+	open func save(set: (_ id: Any)->Void) throws {
+		do {
+			if keyIsEmpty() {
+				let setId = try insert(asData(1))
+				set(setId)
+			} else {
+				let (idname, idval) = firstAsKey()
+				try update(data: asData(1), idName: idname, idValue: idval)
+			}
+		} catch {
+			throw StORMError.error(String(describing: error))
+		}
+	}
+
+	@discardableResult
+	override open func create() throws {
+		do {
+			try insert(asData())
+		} catch {
+			throw StORMError.error(String(describing: error))
+		}
+	}
 }
 
 
