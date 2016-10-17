@@ -3,71 +3,76 @@ import PerfectLib
 import StORM
 @testable import SQLiteStORM
 
-//
-//class User: SQLiteStORM {
-//	// NOTE: First param in class should be the ID.
-//	var id				: Int = 0
-//	var firstname		: String = ""
-//	var lastname		: String = ""
-//	var email			: String = ""
-//
-//
-//	override open func table() -> String {
-//		return "users"
-//	}
-//
-//	override func to(_ this: StORMRow) {
-//		id				= this.data["id"] as! Int
-//		firstname		= this.data["firstname"] as! String
-//		lastname		= this.data["lastname"] as! String
-//		email			= this.data["email"] as! String
-//	}
-//
-//	func rows() -> [User] {
-//		var rows = [User]()
-//		for i in 0..<self.results.rows.count {
-//			let row = User()
-//			row.to(self.results.rows[i])
-//			rows.append(row)
-//		}
-//		return rows
-//	}
-////	override func makeRow() {
-////		self.to(self.results.rows[0])
-////	}
-//}
-//
-//
-//class PostgresSTORMTests: XCTestCase {
-//	var connect = PostgresConnect(
-//		host: "localhost",
-//		username: "perfect",
-//		password: "perfect",
-//		database: "perfect_testing",
-//		port: 32768
-//	)
-//	
-//	override func setUp() {
-//		super.setUp()
-//	}
-//
-//	/* =============================================================================================
-//	Save - New
-//	============================================================================================= */
-//	func testSaveNew() {
-//		let obj = User(connect)
-//		//obj.connection = connect    // Use if object was instantiated without connection
-//		obj.firstname = "X"
-//		obj.lastname = "Y"
-//
-//		do {
-//			try obj.save {id in obj.id = id as! Int }
-//		} catch {
-//			XCTFail(error as! String)
-//		}
-//		XCTAssert(obj.id > 0, "Object not saved (new)")
-//	}
-//
+
+class User: SQLiteStORM {
+	// NOTE: First param in class should be the ID.
+	var id				: Int = 0
+	var firstname		: String = ""
+	var lastname		: String = ""
+	var email			: String = ""
+
+
+	override open func table() -> String {
+		return "user"
+	}
+
+	override func to(_ this: StORMRow) {
+		id				= this.data["id"] as! Int
+		firstname		= this.data["firstname"] as! String
+		lastname		= this.data["lastname"] as! String
+		email			= this.data["email"] as! String
+	}
+
+	func rows() -> [User] {
+		var rows = [User]()
+		for i in 0..<self.results.rows.count {
+			let row = User()
+			row.to(self.results.rows[i])
+			rows.append(row)
+		}
+		return rows
+	}
+
+	// Create the table if needed
+	public func setup() {
+		do {
+			try sqlExec("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstname TEXT, lastname TEXT, email TEXT)")
+		} catch {
+			print(error)
+		}
+	}
+
+}
+
+let connect = SQLiteConnect("./testdb")
+
+class SQLiteStORMTests: XCTestCase {
+	var obj = User()
+
+	override func setUp() {
+		super.setUp()
+
+		obj = User(connect)
+		obj.setup()
+	}
+
+	/* =============================================================================================
+	Save - New
+	============================================================================================= */
+	func testSaveNew() {
+		obj = User(connect)
+		//obj.connection = connect    // Use if object was instantiated without connection
+		obj.firstname = "X"
+		obj.lastname = "Y"
+
+		do {
+			try obj.save {id in obj.id = id as! Int }
+		} catch {
+			XCTFail(String(describing: error))
+		}
+		XCTAssert(obj.id > 0, "Object not saved (new)")
+	}
+
 //	/* =============================================================================================
 //	Save - Update
 //	============================================================================================= */
@@ -268,4 +273,4 @@ import StORM
 //		]
 //	}
 //
-//}
+}
