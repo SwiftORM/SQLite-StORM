@@ -52,8 +52,9 @@ open class SQLiteStORM: StORM {
 					try statement.bind(position: i+1, params[i])
 				}
 			})
+			let x = db.lastInsertRowID()
 			self.connection.close(db)
-			return db.lastInsertRowID()
+			return x
 		} catch {
 			print(error)
 			throw StORMError.error(errorMsg)

@@ -38,7 +38,8 @@ extension SQLiteStORM {
 		}
 		let str = "INSERT INTO \(self.table()) (\(cols.joined(separator: ","))) VALUES(\(substString.joined(separator: ",")))"
 		do {
-			return try execReturnID(str, params: paramString)
+			let x = try execReturnID(str, params: paramString)
+			return x
 		} catch {
 			self.error = StORMError.error(String(describing: error))
 			throw error
