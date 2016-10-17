@@ -6,12 +6,12 @@
 //
 //
 
-import XCTest
-
-#if !os(OSX)
-	public func allTests() -> [XCTestCaseEntry] {
-		return [
-			testCase(SQLiteStORMTests.allTests)
-		]
-	}
-#endif
+//import XCTest
+//
+//#if !os(OSX)
+//	public func allTests() -> [XCTestCaseEntry] {
+//		return [
+//			testCase(SQLiteStORMTests.allTests)
+//		]
+//	}
+//#endif
