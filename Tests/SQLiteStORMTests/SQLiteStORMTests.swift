@@ -192,20 +192,20 @@ class SQLiteStORMTests: XCTestCase {
 	Get (with id) - no record
 	// test get where id does not exist (id)
 	============================================================================================= */
-//	func testGetByPassingIDnoRecord() {
-//		let obj = User(connect)
-//
-//		do {
-//			try obj.get(1111111)
-//			XCTFail("Should have failed (record not found)")
-//		} catch {
-//			if obj.error != StORMError.noRecordFound {
-//				XCTFail("Fall through... Should have failed (record not found): \(obj.error)")
-//			}
-//			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
-//			// test passes - should have a failure!
-//		}
-//	}
+	func testGetByPassingIDnoRecord() {
+		let obj = User(connect)
+
+		do {
+			try obj.get(1111111)
+			XCTFail("Should have failed (record not found)")
+		} catch {
+			if case .noRecordFound = obj.error {
+				XCTFail("Fall through... Should have failed (record not found): \(obj.error)")
+			}
+			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
+			// test passes - should have a failure!
+		}
+	}
 
 
 
@@ -215,20 +215,20 @@ class SQLiteStORMTests: XCTestCase {
 	Get (preset id) - no record
 	// test get where id does not exist (id)
 	============================================================================================= */
-//	func testGetBySettingIDnoRecord() {
-//		let obj = User(connect)
-//		obj.id = 1111111
-//		do {
-//			try obj.get()
-//			XCTFail("Should have failed (record not found)")
-//		} catch {
-//			if obj.error.string() != StORMError.noRecordFound.string() {
-//				XCTFail("Fall through... Should have failed (record not found): \(obj.error.string())")
-//			}
-//			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
-//			// test passes - should have a failure!
-//		}
-//	}
+	func testGetBySettingIDnoRecord() {
+		let obj = User(connect)
+		obj.id = 1111111
+		do {
+			try obj.get()
+			XCTFail("Should have failed (record not found)")
+		} catch {
+			if case .noRecordFound = obj.error {
+				XCTFail("Fall through... Should have failed (record not found): \(obj.error.string())")
+			}
+			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
+			// test passes - should have a failure!
+		}
+	}
 
 
 //	/* =============================================================================================
@@ -353,6 +353,8 @@ class SQLiteStORMTests: XCTestCase {
 			("testSaveCreate", testSaveCreate),
 			("testGetByPassingID", testGetByPassingID),
 			("testGetByID", testGetByID),
+			("testGetByPassingIDnoRecord",testGetByPassingIDnoRecord),
+			("testGetBySettingIDnoRecord",testGetBySettingIDnoRecord),
 			("testGetByPassingIDtooLarge", testGetByPassingIDtooLarge),
 			("testCheckDeleteSQL", testCheckDeleteSQL),
 			("testDelete", testDelete),
