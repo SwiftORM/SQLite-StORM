@@ -21,7 +21,7 @@ open class SQLiteStORM: StORM {
 		super.init()
 	}
 
-	public init(_ connect: SQLiteConnect) {
+	required public init(_ connect: SQLiteConnect) {
 		super.init()
 		self.connection = connect
 	}
