@@ -9,6 +9,9 @@
 import StORM
 import SQLite
 // StORMProtocol
+
+public var connect: SQLiteConnect?
+
 open class SQLiteStORM: StORM {
 	open var connection = SQLiteConnect()
 
