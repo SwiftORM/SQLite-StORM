@@ -29,9 +29,16 @@ open class SQLiteStORM: StORM {
 		self.connection = connect
 	}
 
+	private func printDebug(_ statement: String, _ params: [String]) {
+		if StORMdebug { print("StORM Debug: \(statement) : \(params.joined(separator: ", "))") }
+	}
+
 	// Internal function which executes statements
 	@discardableResult
 	func exec(_ smt: String) throws {
+
+		printDebug(smt, [])
+
 		do {
 			let db = try self.connection.open()
 			try db.execute(statement: smt)
@@ -45,6 +52,7 @@ open class SQLiteStORM: StORM {
 	// Returns an id
 	@discardableResult
 	func execReturnID(_ smt: String, params: [String]) throws -> Any {
+		printDebug(smt, params)
 		do {
 			let db = try self.connection.open()
 
@@ -66,6 +74,7 @@ open class SQLiteStORM: StORM {
 
 	@discardableResult
 	func execStatement(_ smt: String) throws {
+		printDebug(smt, [])
 		do {
 			let db = try self.connection.open()
 			try db.execute(statement: smt)
@@ -80,6 +89,7 @@ open class SQLiteStORM: StORM {
 	// Returns an array of SQLiteStmt
 	@discardableResult
 	func exec(_ smt: String, params: [String]) throws -> [SQLiteStmt] {
+		printDebug(smt, params)
 		var results = [SQLiteStmt]()
 		do {
 			let db = try self.connection.open()
@@ -107,6 +117,7 @@ open class SQLiteStORM: StORM {
 	// Returns a processed row set
 	@discardableResult
 	func execRows(_ smt: String, params: [String]) throws -> [StORMRow] {
+		printDebug(smt, params)
 		var rows = [StORMRow]()
 //		let results = try exec(smt, params: params)
 //		print(results[0].columnCount())
