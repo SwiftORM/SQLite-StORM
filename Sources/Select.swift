@@ -111,7 +111,8 @@ extension SQLiteStORM {
 
 			//return results
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			self.errorMsg = String(describing: error)
+			//			self.error = StORMError.error(String(describing: error))
 			throw error
 		}
 	}
