@@ -196,6 +196,46 @@ open class SQLiteStORM: StORM {
 			throw StORMError.error(String(describing: error))
 		}
 	}
+
+	/// Table Create Statement
+	@discardableResult
+	open func setupTable() throws {
+		var opt = [String]()
+		for child in Mirror(reflecting: self).children {
+			guard let key = child.label else {
+				continue
+			}
+			var verbage = ""
+			if !key.hasPrefix("internal_") {
+				verbage = "\(key) "
+				if child.value is Int {
+					verbage += "INTEGER"
+				} else if child.value is Double {
+					verbage += "REAL"
+				} else if child.value is Double {
+					verbage += "REAL"
+				} else if child.value is UInt || child.value is UInt8 || child.value is UInt16 || child.value is UInt32 || child.value is UInt64 {
+					verbage += "BLOB"
+				} else {
+					verbage += "TEXT"
+				}
+				if opt.count == 0 && child.value is Int {
+					verbage += " PRIMARY KEY AUTOINCREMENT NOT NULL"
+				} else if  opt.count == 0 {
+					verbage += " PRIMARY KEY NOT NULL"
+				}
+				opt.append(verbage)
+			}
+		}
+		let createStatement = "CREATE TABLE IF NOT EXISTS \(table()) (\(opt.joined(separator: ", ")))"
+
+		do {
+			try sqlExec(createStatement)
+		} catch {
+			print(error)
+			throw StORMError.error(String(describing: error))
+		}
+	}
 }
 
 
