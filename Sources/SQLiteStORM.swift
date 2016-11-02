@@ -161,10 +161,10 @@ open class SQLiteStORM: StORM {
 
 
 	@discardableResult
-	open func save() throws {
+	open func save() throws -> Any {
 		do {
 			if keyIsEmpty() {
-				try insert(asData(1))
+				return try insert(asData(1))
 			} else {
 				let (idname, idval) = firstAsKey()
 				try update(data: asData(1), idName: idname, idValue: idval)
@@ -172,6 +172,7 @@ open class SQLiteStORM: StORM {
 		} catch {
 			throw StORMError.error(String(describing: error))
 		}
+		return 0
 	}
 	@discardableResult
 	open func save(set: (_ id: Any)->Void) throws {
