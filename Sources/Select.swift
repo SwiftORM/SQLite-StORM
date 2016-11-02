@@ -10,6 +10,19 @@ import StORM
 
 extension SQLiteStORM {
 
+	public func findAll() throws {
+		do {
+			try select(
+				columns: [],
+				whereclause: "1",
+				params: [],
+				orderby: []
+			)
+		} catch {
+			throw StORMError.error(String(describing: error))
+		}
+	}
+
 	public func select(
 		whereclause:	String,
 		params:			[Any],
