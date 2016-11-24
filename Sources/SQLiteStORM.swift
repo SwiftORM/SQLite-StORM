@@ -12,6 +12,15 @@ import SQLite
 
 public var connect: SQLiteConnect?
 
+
+public struct SQLiteConnector {
+	private init(){}
+	/// Holds the location of the db file.
+	public static var db = ""
+}
+
+
+
 open class SQLiteStORM: StORM {
 	open var connection = SQLiteConnect()
 
@@ -37,7 +46,11 @@ open class SQLiteStORM: StORM {
 	@discardableResult
 	func exec(_ smt: String) throws {
 
-		printDebug(smt, [])
+		if let thisDB = connect?.database {
+			self.connection.database = thisDB
+		} else if !SQLiteConnector.db.isEmpty {
+			self.connection.database = SQLiteConnector.db
+		}
 
 		do {
 			let db = try self.connection.open()
@@ -52,7 +65,14 @@ open class SQLiteStORM: StORM {
 	// Returns an id
 	@discardableResult
 	func execReturnID(_ smt: String, params: [String]) throws -> Any {
-		printDebug(smt, params)
+//		printDebug(smt, params)
+
+		if let thisDB = connect?.database {
+			self.connection.database = thisDB
+		} else if !SQLiteConnector.db.isEmpty {
+			self.connection.database = SQLiteConnector.db
+		}
+
 		do {
 			let db = try self.connection.open()
 
@@ -74,7 +94,15 @@ open class SQLiteStORM: StORM {
 
 	@discardableResult
 	func execStatement(_ smt: String) throws {
-		printDebug(smt, [])
+//		printDebug(smt, [])
+
+		if let thisDB = connect?.database {
+			self.connection.database = thisDB
+		} else if !SQLiteConnector.db.isEmpty {
+			self.connection.database = SQLiteConnector.db
+		}
+
+
 		do {
 			let db = try self.connection.open()
 			try db.execute(statement: smt)
@@ -89,7 +117,14 @@ open class SQLiteStORM: StORM {
 	// Returns an array of SQLiteStmt
 	@discardableResult
 	func exec(_ smt: String, params: [String]) throws -> [SQLiteStmt] {
-		printDebug(smt, params)
+//		printDebug(smt, params)
+
+		if let thisDB = connect?.database {
+			self.connection.database = thisDB
+		} else if !SQLiteConnector.db.isEmpty {
+			self.connection.database = SQLiteConnector.db
+		}
+
 		var results = [SQLiteStmt]()
 		do {
 			let db = try self.connection.open()
@@ -117,7 +152,14 @@ open class SQLiteStORM: StORM {
 	// Returns a processed row set
 	@discardableResult
 	func execRows(_ smt: String, params: [String]) throws -> [StORMRow] {
-		printDebug(smt, params)
+//		printDebug(smt, params)
+
+		if let thisDB = connect?.database {
+			self.connection.database = thisDB
+		} else if !SQLiteConnector.db.isEmpty {
+			self.connection.database = SQLiteConnector.db
+		}
+
 		var rows = [StORMRow]()
 //		let results = try exec(smt, params: params)
 //		print(results[0].columnCount())
