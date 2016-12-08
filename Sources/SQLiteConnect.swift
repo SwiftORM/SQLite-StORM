@@ -10,6 +10,8 @@ import StORM
 import SQLite
 import PerfectLogger
 
+/// Base connector class, inheriting from StORMConnect.
+/// Provides connection services for the Database Provider
 open class SQLiteConnect: StORMConnect {
 
 	/// Init with no credentials
@@ -25,7 +27,8 @@ open class SQLiteConnect: StORMConnect {
 		self.datasource = .SQLite
 	}
 
-	// Opens the db
+	/// Opens the database file
+	/// Returns a SQLite object
 	public func open() throws -> SQLite {
 		do {
 			let db = try SQLite(self.database)
@@ -35,8 +38,10 @@ open class SQLiteConnect: StORMConnect {
 			throw StORMError.error("\(error)")
 		}
 	}
+
+	/// Closes the connection to the database file
 	public func close(_ db: SQLite) {
-		db.close() // This makes sure we close our connection.
+		db.close()
 	}
 }
 

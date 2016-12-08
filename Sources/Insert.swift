@@ -9,9 +9,10 @@
 import StORM
 import PerfectLogger
 
+/// Performs insert functions as an extension to the main class.
 extension SQLiteStORM {
 
-
+	/// Insert function where the suppled data is in [(String, Any)] format.
 	@discardableResult
 	public func insert(_ data: [(String, Any)]) throws -> Any {
 
@@ -29,6 +30,7 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Insert function where the suppled data is in matching arrays of columns and parameter values.
 	public func insert(cols: [String], params: [Any]) throws -> Any {
 
 		var paramString = [String]()

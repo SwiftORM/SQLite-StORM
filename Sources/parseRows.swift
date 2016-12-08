@@ -20,7 +20,10 @@ import StORM
 import SQLite
 import PerfectLib
 
+/// Supplies the parseRows method extending the main class.
 extension SQLiteStORM {
+
+	/// parseRows takes the [SQLiteStmt] result and returns an array of StormRows
 	public func parseRows(_ result: [SQLiteStmt]) -> [StORMRow] {
 		var resultRows = [StORMRow]()
 		for row in result {
@@ -28,6 +31,8 @@ extension SQLiteStORM {
 		}
 		return resultRows
 	}
+
+	/// parseRows takes the SQLiteStmt and returns a StormRow
 	public func parseRow(_ row: SQLiteStmt) -> StORMRow {
 		let this = StORMRow()
 		for i in 0..<row.columnCount() {

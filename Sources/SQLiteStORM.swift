@@ -11,26 +11,35 @@ import SQLite
 import PerfectLogger
 
 
+/// SQLiteConnector sets the connection parameters for the SQLite3 database file access
+/// Usage:
+/// SQLiteConnector.db = "XXXXXX"
 public struct SQLiteConnector {
 	private init(){}
+
 	/// Holds the location of the db file.
 	public static var db = ""
 }
 
 
-
+/// SuperClass that inherits from the foundation "StORM" class.
+/// Provides SQLite-specific ORM functionality to child classes.
 open class SQLiteStORM: StORM {
 	open var connection = SQLiteConnect()
 
 
+	/// Table that the child object relates to in the database.
+	/// Defined as "open" as it is meant to be overridden by the child class.
 	open func table() -> String {
 		return "unset"
 	}
 
+	/// Empty initializer. This is the default action.
 	override public init() {
 		super.init()
 	}
 
+	/// Alternate initializer, allows supply of a custom SQLiteConnect object.
 	public init(_ connect: SQLiteConnect) {
 		super.init()
 		self.connection = connect
@@ -178,14 +187,27 @@ open class SQLiteStORM: StORM {
 		return rows
 	}
 
+	/// Generic "to" function
+	/// Defined as "open" as it is meant to be overridden by the child class.
+	///
+	/// Sample usage:
+	///		id				= this.data["id"] as? Int ?? 0
+	///		firstname		= this.data["firstname"] as? String ?? ""
+	///		lastname		= this.data["lastname"] as? String ?? ""
+	///		email			= this.data["email"] as? String ?? ""
 	open func to(_ this: StORMRow) {
 	}
 
+	/// Generic "makeRow" function
+	/// Defined as "open" as it is meant to be overridden by the child class.
 	open func makeRow() {
 		self.to(self.results.rows[0])
 	}
 
-
+	/// Standard "Save" function.
+	/// Designed as "open" so it can be overriden and customized.
+	/// If an ID has been defined, save() will perform an updae, otherwise a new document is created.
+	/// On error can throw a StORMError error.
 	@discardableResult
 	open func save() throws -> Any {
 		do {
@@ -201,6 +223,12 @@ open class SQLiteStORM: StORM {
 		}
 		return 0
 	}
+
+	/// Alternate "Save" function.
+	/// This save method will use the supplied "set" to assign or otherwise process the returned id.
+	/// Designed as "open" so it can be overriden and customized.
+	/// If an ID has been defined, save() will perform an updae, otherwise a new document is created.
+	/// On error can throw a StORMError error.
 	@discardableResult
 	open func save(set: (_ id: Any)->Void) throws {
 		do {
@@ -217,6 +245,7 @@ open class SQLiteStORM: StORM {
 		}
 	}
 
+	/// Unlike the save() methods, create() mandates the addition of a new document, regardless of whether an ID has been set or specified.
 	@discardableResult
 	override open func create() throws {
 		do {
@@ -233,7 +262,8 @@ open class SQLiteStORM: StORM {
 		try setup()
 	}
 
-	/// Table Create Statement
+	/// Table Creation
+	/// Requires the connection to be configured, as well as a valid "table" property to have been set in the class
 	@discardableResult
 	open func setup() throws {
 		LogFile.info("Running setup: \(table())", logFile: "./StORMlog.txt")

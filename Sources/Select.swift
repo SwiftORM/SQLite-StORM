@@ -9,21 +9,32 @@
 import StORM
 import PerfectLogger
 
+/// Provides select functions as an extension to the main class.
 extension SQLiteStORM {
 
+	/// Retrieves all rows in the table, only limited by the cursor (9,999,999 rows)
 	public func findAll() throws {
 		do {
+			let cursor = StORMCursor(limit: 9999999,offset: 0)
 			try select(
 				columns: [],
 				whereclause: "1",
 				params: [],
-				orderby: []
+				orderby: [],
+				cursor: cursor
 			)
 		} catch {
 			throw StORMError.error("\(error)")
 		}
 	}
 
+	/// Select function with specific where clause.
+	/// Parameterized statements are used, so all params should be passed in using the [Any] params array.
+	/// The whereclause should be specified in the following format: "name = $1 AND email LIKE $2"
+	/// An orderby array can be specified in a String array like ["name DESC","email ASC"]
+	/// A StORMCursor can be supplied, otherwise the default values are used.
+	/// Note that the joins, having and groupBy functionality is unimplemented at this time.
+	/// The select function will populate the object with the results of the query.
 	public func select(
 		whereclause:	String,
 		params:			[Any],
@@ -49,6 +60,13 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Select function with specific where clause, and spefified columns to return.
+	/// Parameterized statements are used, so all params should be passed in using the [Any] params array.
+	/// The whereclause should be specified in the following format: "name = $1 AND email LIKE $2"
+	/// An orderby array can be specified in a String array like ["name DESC","email ASC"]
+	/// A StORMCursor can be supplied, otherwise the default values are used.
+	/// Note that the joins, having and groupBy functionality is unimplemented at this time.
+	/// The select function will populate the object with the results of the query.
 	public func select(
 		columns:		[String],
 		whereclause:	String,

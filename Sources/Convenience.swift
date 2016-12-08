@@ -9,6 +9,7 @@
 import StORM
 import PerfectLogger
 
+/// Convenience methods extending the main class.
 extension SQLiteStORM {
 
 	/// Deletes one row, with an id
@@ -24,6 +25,7 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Deletes one row, with the id as set.
 	public func delete(_ id: Any) throws {
 		let (idname, _) = firstAsKey()
 		do {
@@ -35,6 +37,7 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Retrieves a single row with the supplied ID.
 	public func get(_ id: Any) throws {
 		let (idname, _) = firstAsKey()
 		do {
@@ -46,6 +49,7 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Retrieves a single row with the ID as set.
 	public func get() throws {
 		let (idname, idval) = firstAsKey()
 		do {
@@ -58,6 +62,7 @@ extension SQLiteStORM {
 	}
 
 
+	/// Performs a find on mathing column name/value pairs.
 	public func find(_ data: [(String, Any)]) throws {
 		let (idname, _) = firstAsKey()
 

@@ -10,6 +10,7 @@ import PerfectLib
 import StORM
 import PerfectLogger
 
+/// Performs delete-specific functions as an extension
 extension SQLiteStORM {
 
 	func deleteSQL(_ table: String, idName: String = "id") -> String {

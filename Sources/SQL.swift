@@ -10,8 +10,10 @@ import StORM
 import SQLite
 import PerfectLogger
 
+/// An extension to the main class providing SQL statement functions
 extension SQLiteStORM {
 
+	/// Execute Raw SQL statement
 	@discardableResult
 	public func sqlExec(_ statement: String) throws {
 		do {
@@ -23,6 +25,8 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Execute Raw SQL statement with parameter binding from the params array.
+	/// Returns an array of [SQLiteStmt]
 	@discardableResult
 	public func sql(_ statement: String, params: [String]) throws -> [SQLiteStmt] {
 		do {
@@ -34,6 +38,8 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Execute Raw SQL statement with parameter binding from the params array.
+	/// Returns an ID column
 	@discardableResult
 	public func sqlAny(_ statement: String, params: [String]) throws -> Any {
 		do {
@@ -45,6 +51,8 @@ extension SQLiteStORM {
 		}
 	}
 
+	/// Execute Raw SQL statement with parameter binding from the params array.
+	/// Returns an array of [StORMRow]
 	@discardableResult
 	public func sqlRows(_ statement: String, params: [String]) throws -> [StORMRow] {
 		do {
