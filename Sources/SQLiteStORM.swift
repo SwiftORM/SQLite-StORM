@@ -8,9 +8,7 @@
 
 import StORM
 import SQLite
-// StORMProtocol
-
-public var connect: SQLiteConnect?
+import PerfectLogger
 
 
 public struct SQLiteConnector {
@@ -39,16 +37,14 @@ open class SQLiteStORM: StORM {
 	}
 
 	private func printDebug(_ statement: String, _ params: [String]) {
-		if StORMdebug { print("StORM Debug: \(statement) : \(params.joined(separator: ", "))") }
+		if StORMdebug { LogFile.debug("StORM Debug: \(statement) : \(params.joined(separator: ", "))", logFile: "./StORMlog.txt") }
 	}
 
 	// Internal function which executes statements
 	@discardableResult
 	func exec(_ smt: String) throws {
 
-		if let thisDB = connect?.database {
-			self.connection.database = thisDB
-		} else if !SQLiteConnector.db.isEmpty {
+		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
 		}
 
@@ -67,9 +63,7 @@ open class SQLiteStORM: StORM {
 	func execReturnID(_ smt: String, params: [String]) throws -> Any {
 //		printDebug(smt, params)
 
-		if let thisDB = connect?.database {
-			self.connection.database = thisDB
-		} else if !SQLiteConnector.db.isEmpty {
+		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
 		}
 
@@ -96,9 +90,7 @@ open class SQLiteStORM: StORM {
 	func execStatement(_ smt: String) throws {
 //		printDebug(smt, [])
 
-		if let thisDB = connect?.database {
-			self.connection.database = thisDB
-		} else if !SQLiteConnector.db.isEmpty {
+		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
 		}
 
@@ -108,7 +100,7 @@ open class SQLiteStORM: StORM {
 			try db.execute(statement: smt)
 			self.connection.close(db)
 		} catch {
-			throw StORMError.error(String(describing: error))
+			throw StORMError.error("\(error)")
 		}
 	}
 
@@ -119,9 +111,7 @@ open class SQLiteStORM: StORM {
 	func exec(_ smt: String, params: [String]) throws -> [SQLiteStmt] {
 //		printDebug(smt, params)
 
-		if let thisDB = connect?.database {
-			self.connection.database = thisDB
-		} else if !SQLiteConnector.db.isEmpty {
+		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
 		}
 
@@ -154,9 +144,7 @@ open class SQLiteStORM: StORM {
 	func execRows(_ smt: String, params: [String]) throws -> [StORMRow] {
 //		printDebug(smt, params)
 
-		if let thisDB = connect?.database {
-			self.connection.database = thisDB
-		} else if !SQLiteConnector.db.isEmpty {
+		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
 		}
 
@@ -191,10 +179,6 @@ open class SQLiteStORM: StORM {
 	}
 
 	open func to(_ this: StORMRow) {
-		//		id				= this.data["id"] as! Int
-		//		firstname		= this.data["firstname"] as! String
-		//		lastname		= this.data["lastname"] as! String
-		//		email			= this.data["email"] as! String
 	}
 
 	open func makeRow() {
@@ -212,7 +196,8 @@ open class SQLiteStORM: StORM {
 				try update(data: asData(1), idName: idname, idValue: idval)
 			}
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 		return 0
 	}
@@ -227,7 +212,8 @@ open class SQLiteStORM: StORM {
 				try update(data: asData(1), idName: idname, idValue: idval)
 			}
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 	}
 
@@ -236,13 +222,21 @@ open class SQLiteStORM: StORM {
 		do {
 			try insert(asData())
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
+	}
+
+	/// Table Creation (alias for setup)
+	@discardableResult
+	open func setupTable() throws {
+		try setup()
 	}
 
 	/// Table Create Statement
 	@discardableResult
-	open func setupTable() throws {
+	open func setup() throws {
+		LogFile.info("Running setup: \(table())", logFile: "./StORMlog.txt")
 		var opt = [String]()
 		for child in Mirror(reflecting: self).children {
 			guard let key = child.label else {
@@ -271,12 +265,13 @@ open class SQLiteStORM: StORM {
 			}
 		}
 		let createStatement = "CREATE TABLE IF NOT EXISTS \(table()) (\(opt.joined(separator: ", ")))"
+		if StORMdebug { LogFile.info("createStatement: \(createStatement)", logFile: "./StORMlog.txt") }
 
 		do {
 			try sqlExec(createStatement)
 		} catch {
-			print(error)
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 	}
 }

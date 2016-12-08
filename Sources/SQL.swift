@@ -8,6 +8,7 @@
 
 import StORM
 import SQLite
+import PerfectLogger
 
 extension SQLiteStORM {
 
@@ -16,7 +17,8 @@ extension SQLiteStORM {
 		do {
 			try execStatement(statement)
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 	}
@@ -26,7 +28,8 @@ extension SQLiteStORM {
 		do {
 			return try exec(statement, params: params)
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 	}
@@ -36,7 +39,8 @@ extension SQLiteStORM {
 		do {
 			return try execReturnID(statement, params: params)
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 	}
@@ -46,7 +50,8 @@ extension SQLiteStORM {
 		do {
 			return try execRows(statement, params: params)
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 	}

@@ -8,6 +8,7 @@
 
 import PerfectLib
 import StORM
+import PerfectLogger
 
 extension SQLiteStORM {
 
@@ -21,7 +22,8 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [String(id)])
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 		return true
@@ -33,7 +35,8 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [id])
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 		return true
@@ -45,7 +48,8 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idName), params: [id.string])
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 		return true

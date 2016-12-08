@@ -7,6 +7,7 @@
 //
 
 import StORM
+import PerfectLogger
 
 extension SQLiteStORM {
 
@@ -23,13 +24,13 @@ extension SQLiteStORM {
 		do {
 			return try insert(cols: keys, params: vals)
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 	}
 
 	public func insert(cols: [String], params: [Any]) throws -> Any {
 
-		// SQLite specific insert statement exec
 		var paramString = [String]()
 		var substString = [String]()
 		for i in 0..<params.count {
@@ -41,7 +42,8 @@ extension SQLiteStORM {
 			let x = try execReturnID(str, params: paramString)
 			return x
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
 		

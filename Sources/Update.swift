@@ -8,6 +8,7 @@
 
 import StORM
 import SQLite
+import PerfectLogger
 
 extension SQLiteStORM {
 
@@ -27,10 +28,10 @@ extension SQLiteStORM {
 		do {
 			try exec(str, params: paramsString)
 		} catch {
-			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.error = StORMError.error("\(error)")
 			throw error
 		}
-
 		return true
 	}
 
@@ -46,7 +47,8 @@ extension SQLiteStORM {
 		do {
 			return try update(cols: keys, params: vals, idName: idName, idValue: idValue)
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 	}
 	

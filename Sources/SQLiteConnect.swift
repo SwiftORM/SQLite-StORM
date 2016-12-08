@@ -8,6 +8,7 @@
 
 import StORM
 import SQLite
+import PerfectLogger
 
 open class SQLiteConnect: StORMConnect {
 
@@ -28,12 +29,10 @@ open class SQLiteConnect: StORMConnect {
 	public func open() throws -> SQLite {
 		do {
 			let db = try SQLite(self.database)
-			//			defer {
-			//				db.close() // This makes sure we close our connection.
-			//			}
 			return db
 		} catch {
-			throw StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			throw StORMError.error("\(error)")
 		}
 	}
 	public func close(_ db: SQLite) {

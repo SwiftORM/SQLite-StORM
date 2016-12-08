@@ -7,6 +7,7 @@
 //
 
 import StORM
+import PerfectLogger
 
 extension SQLiteStORM {
 
@@ -19,7 +20,7 @@ extension SQLiteStORM {
 				orderby: []
 			)
 		} catch {
-			throw StORMError.error(String(describing: error))
+			throw StORMError.error("\(error)")
 		}
 	}
 
@@ -44,7 +45,7 @@ extension SQLiteStORM {
 					groupBy: groupBy
 			)
 		} catch {
-			throw StORMError.error(String(describing: error))
+			throw StORMError.error("\(error)")
 		}
 	}
 
@@ -122,10 +123,9 @@ extension SQLiteStORM {
 			// if just one row returned, act like a "GET"
 			if results.cursorData.totalRecords == 1 { makeRow() }
 
-			//return results
 		} catch {
-			self.errorMsg = String(describing: error)
-			//			self.error = StORMError.error(String(describing: error))
+			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			self.errorMsg = "\(error)"
 			throw error
 		}
 	}

@@ -68,3 +68,4 @@ Packages/
 *.xcodeproj/
 docs/
 testdb
+buildlinux
