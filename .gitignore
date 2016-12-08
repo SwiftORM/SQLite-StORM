@@ -69,3 +69,6 @@ Packages/
 docs/
 testdb
 buildlinux
+/.packages_lin
+/.build_lin
+Package.swift.orig
