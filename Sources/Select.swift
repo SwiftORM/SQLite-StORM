@@ -126,17 +126,8 @@ extension SQLiteStORM {
 				str += " OFFSET \(cursor.offset)"
 			}
 
-			//print("EXEC: \(str)")
 			// save results into ResultSet
 			results.rows = try execRows(str, params: paramsString)
-
-			// id no records found throw an error .noRecordFound
-			if results.cursorData.totalRecords == 0 {
-//				print("************ NO RECORDS FOUND *****************")
-				self.error = StORMError.noRecordFound
-//				print("************ \(self.error.string()) *****************")
-				throw StORMError.noRecordFound
-			}
 
 			// if just one row returned, act like a "GET"
 			if results.cursorData.totalRecords == 1 { makeRow() }
