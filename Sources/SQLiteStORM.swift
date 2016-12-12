@@ -264,6 +264,7 @@ open class SQLiteStORM: StORM {
 
 	/// Table Creation
 	/// Requires the connection to be configured, as well as a valid "table" property to have been set in the class
+	/// Creates the table by inspecting the object. Columns will be created that relate to the assigned type of the property. Properties beginning with an underscore or "internal_" will be ignored.
 	@discardableResult
 	open func setup() throws {
 		LogFile.info("Running setup: \(table())", logFile: "./StORMlog.txt")
