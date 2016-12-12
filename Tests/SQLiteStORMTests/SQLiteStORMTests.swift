@@ -34,33 +34,38 @@ class User: SQLiteStORM {
 	}
 
 	// Create the table if needed
-	public func setup() {
-		do {
-			try sqlExec("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstname TEXT, lastname TEXT, email TEXT)")
-		} catch {
-			print(error)
-		}
-	}
+//	public func setup() {
+//		do {
+//			try sqlExec("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, firstname TEXT, lastname TEXT, email TEXT)")
+//		} catch {
+//			print(error)
+//		}
+//	}
 
 }
 
-let connect = SQLiteConnect("./testdb")
 
 class SQLiteStORMTests: XCTestCase {
 	var obj = User()
 
 	override func setUp() {
 		super.setUp()
+		SQLiteConnector.db = "./testdb"
 
-		obj = User(connect)
-		obj.setup()
+		obj = User()
+		do {
+			try obj.setup()
+		} catch {
+			XCTFail("\(error)")
+		}
+
 	}
 
 	/* =============================================================================================
 	Save - New
 	============================================================================================= */
 	func testSaveNew() {
-		obj = User(connect)
+		obj = User()
 		//obj.connection = connect    // Use if object was instantiated without connection
 		obj.firstname = "X"
 		obj.lastname = "Y"
@@ -77,7 +82,7 @@ class SQLiteStORMTests: XCTestCase {
 	Save - Update
 	============================================================================================= */
 	func testSaveUpdate() {
-		let obj = User(connect)
+		let obj = User()
 		//obj.connection = connect    // Use if object was instantiated without connection
 		obj.firstname = "X"
 		obj.lastname = "Y"
@@ -103,7 +108,7 @@ class SQLiteStORMTests: XCTestCase {
 	Save - Create
 	============================================================================================= */
 	func testSaveCreate() {
-		let obj = User(connect)
+		let obj = User()
 		do {
 			try obj.delete(10001)
 			obj.id			= 10001
@@ -121,7 +126,7 @@ class SQLiteStORMTests: XCTestCase {
 	Get (with id)
 	============================================================================================= */
 	func testGetByPassingID() {
-		let obj = User(connect)
+		let obj = User()
 		//obj.connection = connect    // Use if object was instantiated without connection
 		obj.firstname = "X"
 		obj.lastname = "Y"
@@ -132,7 +137,7 @@ class SQLiteStORMTests: XCTestCase {
 			XCTFail(error as! String)
 		}
 
-		let obj2 = User(connect)
+		let obj2 = User()
 
 		do {
 			try obj2.get(obj.id)
@@ -149,7 +154,7 @@ class SQLiteStORMTests: XCTestCase {
 	Get (by id set)
 	============================================================================================= */
 	func testGetByID() {
-		let obj = User(connect)
+		let obj = User()
 		//obj.connection = connect    // Use if object was instantiated without connection
 		obj.firstname = "X"
 		obj.lastname = "Y"
@@ -160,7 +165,7 @@ class SQLiteStORMTests: XCTestCase {
 			XCTFail(error as! String)
 		}
 
-		let obj2 = User(connect)
+		let obj2 = User()
 		obj2.id = obj.id
 		
 		do {
@@ -173,37 +178,19 @@ class SQLiteStORMTests: XCTestCase {
 		XCTAssert(obj.lastname == obj2.lastname, "Object not the same (lastname)")
 	}
 
-	/* =============================================================================================
-	Get (with id) - integer too large
-	============================================================================================= */
-	func testGetByPassingIDtooLarge() {
-		let obj = User(connect)
 
-		do {
-			try obj.get(874682634789)
-			XCTFail("Should have failed (integer too large)")
-		} catch {
-			print("^ Ignore this error, that is expected and should show 'ERROR:  value \"874682634789\" is out of range for type integer'")
-			// test passes - should have a failure!
-		}
-	}
-	
 	/* =============================================================================================
 	Get (with id) - no record
 	// test get where id does not exist (id)
 	============================================================================================= */
 	func testGetByPassingIDnoRecord() {
-		let obj = User(connect)
+		let obj = User()
 
 		do {
 			try obj.get(1111111)
-			XCTFail("Should have failed (record not found)")
+			XCTAssert(obj.results.cursorData.totalRecords == 0, "Object should have found no rows")
 		} catch {
-			if case .noRecordFound = obj.error {
-				XCTFail("Fall through... Should have failed (record not found): \(obj.error)")
-			}
-			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
-			// test passes - should have a failure!
+			XCTFail(error as! String)
 		}
 	}
 
@@ -216,17 +203,13 @@ class SQLiteStORMTests: XCTestCase {
 	// test get where id does not exist (id)
 	============================================================================================= */
 	func testGetBySettingIDnoRecord() {
-		let obj = User(connect)
+		let obj = User()
 		obj.id = 1111111
 		do {
 			try obj.get()
-			XCTFail("Should have failed (record not found)")
+			XCTAssert(obj.results.cursorData.totalRecords == 0, "Object should have found no rows")
 		} catch {
-			if case .noRecordFound = obj.error {
-				XCTFail("Fall through... Should have failed (record not found): \(obj.error.string())")
-			}
-			print("^ Ignore this error, that is expected and should show 'ERROR:  not found'")
-			// test passes - should have a failure!
+			XCTFail(error as! String)
 		}
 	}
 
@@ -236,7 +219,7 @@ class SQLiteStORMTests: XCTestCase {
 //	// deleteSQL
 //	============================================================================================= */
 	func testCheckDeleteSQL() {
-		let obj = User(connect)
+		let obj = User()
 		XCTAssert(obj.deleteSQL("test", idName: "testid") == "DELETE FROM test WHERE testid = :1", "DeleteSQL statement is not correct")
 
 	}
@@ -245,7 +228,7 @@ class SQLiteStORMTests: XCTestCase {
 	Delete
 	============================================================================================= */
 	func testDelete() {
-		let obj = User(connect)
+		let obj = User()
 		obj.firstname = "Donkey"
 		obj.lastname = "Kong"
 
@@ -266,7 +249,7 @@ class SQLiteStORMTests: XCTestCase {
 	Delete
 	============================================================================================= */
 	func testDeleteID() {
-		let obj = User(connect)
+		let obj = User()
 		obj.firstname = "Donkey"
 		obj.lastname = "Kong"
 
@@ -276,7 +259,7 @@ class SQLiteStORMTests: XCTestCase {
 			XCTFail(String(describing: error))
 		}
 
-		let obj2 = User(connect)
+		let obj2 = User()
 		do {
 			try obj2.delete(obj.id)
 		} catch {
@@ -289,7 +272,7 @@ class SQLiteStORMTests: XCTestCase {
 	Find
 	============================================================================================= */
 	func testFind() {
-		let obj = User(connect)
+		let obj = User()
 		obj.firstname = "Donkey"
 		obj.lastname = "Kong"
 
@@ -299,7 +282,7 @@ class SQLiteStORMTests: XCTestCase {
 			XCTFail(String(describing: error))
 		}
 
-		let obj2 = User(connect)
+		let obj2 = User()
 		do {
 			try obj2.find([("firstname", "Donkey")])
 			//print("Find Record:  \(obj.id), \(obj.firstname), \(obj.lastname), \(obj.email)")
@@ -317,7 +300,7 @@ class SQLiteStORMTests: XCTestCase {
 	Select
 	============================================================================================= */
 	func testSelect() {
-		let obj = User(connect)
+		let obj = User()
 		obj.firstname = "Donkey"
 		obj.lastname = "Kong"
 
@@ -327,7 +310,7 @@ class SQLiteStORMTests: XCTestCase {
 			XCTFail(String(describing: error))
 		}
 
-		let obj2 = User(connect)
+		let obj2 = User()
 		do {
 			try obj2.select(whereclause: "id = :1", params: [obj.id], orderby: [])
 			XCTAssert(obj2.rows().count == 1, "testSelect count is not correct")
@@ -355,7 +338,6 @@ class SQLiteStORMTests: XCTestCase {
 			("testGetByID", testGetByID),
 			("testGetByPassingIDnoRecord",testGetByPassingIDnoRecord),
 			("testGetBySettingIDnoRecord",testGetBySettingIDnoRecord),
-			("testGetByPassingIDtooLarge", testGetByPassingIDtooLarge),
 			("testCheckDeleteSQL", testCheckDeleteSQL),
 			("testDelete", testDelete),
 			("testDeleteID", testDeleteID),
