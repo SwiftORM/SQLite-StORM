@@ -52,6 +52,7 @@ open class SQLiteStORM: StORM {
 	// Internal function which executes statements
 	@discardableResult
 	func exec(_ smt: String) throws {
+		printDebug(smt, [])
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
@@ -70,7 +71,7 @@ open class SQLiteStORM: StORM {
 	// Returns an id
 	@discardableResult
 	func execReturnID(_ smt: String, params: [String]) throws -> Any {
-//		printDebug(smt, params)
+		printDebug(smt, params)
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
@@ -97,7 +98,7 @@ open class SQLiteStORM: StORM {
 
 	@discardableResult
 	func execStatement(_ smt: String) throws {
-//		printDebug(smt, [])
+		printDebug(smt, [])
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
@@ -118,7 +119,7 @@ open class SQLiteStORM: StORM {
 	// Returns an array of SQLiteStmt
 	@discardableResult
 	func exec(_ smt: String, params: [String]) throws -> [SQLiteStmt] {
-//		printDebug(smt, params)
+		printDebug(smt, params)
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
@@ -151,7 +152,7 @@ open class SQLiteStORM: StORM {
 	// Returns a processed row set
 	@discardableResult
 	func execRows(_ smt: String, params: [String]) throws -> [StORMRow] {
-//		printDebug(smt, params)
+		printDebug(smt, params)
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
