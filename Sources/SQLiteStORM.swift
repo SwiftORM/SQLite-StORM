@@ -275,7 +275,7 @@ open class SQLiteStORM: StORM {
 				continue
 			}
 			var verbage = ""
-			if !key.hasPrefix("internal_") {
+			if !key.hasPrefix("internal_") && !key.hasPrefix("_") {
 				verbage = "\(key) "
 				if child.value is Int {
 					verbage += "INTEGER"
