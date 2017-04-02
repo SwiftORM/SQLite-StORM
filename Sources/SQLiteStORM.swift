@@ -51,7 +51,6 @@ open class SQLiteStORM: StORM {
 	}
 
 	// Internal function which executes statements
-	@discardableResult
 	func exec(_ smt: String) throws {
 		printDebug(smt, [])
 
@@ -97,7 +96,6 @@ open class SQLiteStORM: StORM {
 		}
 	}
 
-	@discardableResult
 	func execStatement(_ smt: String) throws {
 		printDebug(smt, [])
 
@@ -231,7 +229,6 @@ open class SQLiteStORM: StORM {
 	/// Designed as "open" so it can be overriden and customized.
 	/// If an ID has been defined, save() will perform an updae, otherwise a new document is created.
 	/// On error can throw a StORMError error.
-	@discardableResult
 	open func save(set: (_ id: Any)->Void) throws {
 		do {
 			if keyIsEmpty() {
@@ -248,7 +245,6 @@ open class SQLiteStORM: StORM {
 	}
 
 	/// Unlike the save() methods, create() mandates the addition of a new document, regardless of whether an ID has been set or specified.
-	@discardableResult
 	override open func create() throws {
 		do {
 			try insert(asData())
@@ -259,7 +255,6 @@ open class SQLiteStORM: StORM {
 	}
 
 	/// Table Creation (alias for setup)
-	@discardableResult
 	open func setupTable() throws {
 		try setup()
 	}
@@ -267,7 +262,6 @@ open class SQLiteStORM: StORM {
 	/// Table Creation
 	/// Requires the connection to be configured, as well as a valid "table" property to have been set in the class
 	/// Creates the table by inspecting the object. Columns will be created that relate to the assigned type of the property. Properties beginning with an underscore or "internal_" will be ignored.
-	@discardableResult
 	open func setup() throws {
 		LogFile.info("Running setup: \(table())", logFile: "./StORMlog.txt")
 		var opt = [String]()

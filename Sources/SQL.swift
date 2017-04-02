@@ -14,7 +14,7 @@ import PerfectLogger
 extension SQLiteStORM {
 
 	/// Execute Raw SQL statement
-	@discardableResult
+	
 	public func sqlExec(_ statement: String) throws {
 		do {
 			try execStatement(statement)
