@@ -72,3 +72,6 @@ buildlinux
 /.packages_lin
 /.build_lin
 Package.swift.orig
+Package.pins
+Package.resolved
+PADockerfile_build

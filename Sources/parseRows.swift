@@ -17,7 +17,7 @@
 
 
 import StORM
-import SQLite
+import PerfectSQLite
 import PerfectLib
 
 /// Supplies the parseRows method extending the main class.

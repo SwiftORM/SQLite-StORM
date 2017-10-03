@@ -7,7 +7,7 @@
 //
 
 import StORM
-import SQLite
+import PerfectSQLite
 import PerfectLogger
 
 /// Base connector class, inheriting from StORMConnect.
