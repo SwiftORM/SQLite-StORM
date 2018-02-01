@@ -92,7 +92,7 @@ extension SQLiteStORM {
 			}
 			clauseSelectList = keys.joined(separator: ",")
 		}
-		if whereclause.characters.count > 0 {
+		if whereclause.count > 0 {
 			clauseWhere = " WHERE \(whereclause)"
 		}
 
