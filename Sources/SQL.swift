@@ -19,7 +19,7 @@ extension SQLiteStORM {
 		do {
 			try execStatement(statement)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -32,7 +32,7 @@ extension SQLiteStORM {
 		do {
 			return try exec(statement, params: params)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -45,7 +45,7 @@ extension SQLiteStORM {
 		do {
 			return try execReturnID(statement, params: params)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -58,7 +58,7 @@ extension SQLiteStORM {
 		do {
 			return try execRows(statement, params: params)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}

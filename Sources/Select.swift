@@ -133,7 +133,7 @@ extension SQLiteStORM {
 			if results.cursorData.totalRecords == 1 { makeRow() }
 
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.errorMsg = "\(error)"
 			throw error
 		}

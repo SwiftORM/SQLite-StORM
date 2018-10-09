@@ -34,7 +34,7 @@ open class SQLiteConnect: StORMConnect {
 			let db = try SQLite(self.database)
 			return db
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 	}
