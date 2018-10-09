@@ -47,7 +47,7 @@ open class SQLiteStORM: StORM {
 	}
 
 	private func printDebug(_ statement: String, _ params: [String]) {
-		if StORMdebug { LogFile.debug("StORM Debug: \(statement) : \(params.joined(separator: ", "))", logFile: "./StORMlog.txt") }
+		if StORMDebug.active { LogFile.debug("StORM Debug: \(statement) : \(params.joined(separator: ", "))", logFile: StORMDebug.location) }
 	}
 
 	// Internal function which executes statements
@@ -218,7 +218,7 @@ open class SQLiteStORM: StORM {
 				try update(data: asData(1), idName: idname, idValue: idval)
 			}
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 		return 0
@@ -239,7 +239,7 @@ open class SQLiteStORM: StORM {
 				try update(data: asData(1), idName: idname, idValue: idval)
 			}
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 	}
@@ -249,7 +249,7 @@ open class SQLiteStORM: StORM {
 		do {
 			try insert(asData())
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 	}
@@ -263,7 +263,7 @@ open class SQLiteStORM: StORM {
 	/// Requires the connection to be configured, as well as a valid "table" property to have been set in the class
 	/// Creates the table by inspecting the object. Columns will be created that relate to the assigned type of the property. Properties beginning with an underscore or "internal_" will be ignored.
 	open func setup() throws {
-		LogFile.info("Running setup: \(table())", logFile: "./StORMlog.txt")
+		LogFile.info("Running setup: \(table())", logFile: StORMDebug.location)
 		var opt = [String]()
 		for child in Mirror(reflecting: self).children {
 			guard let key = child.label else {
@@ -292,12 +292,12 @@ open class SQLiteStORM: StORM {
 			}
 		}
 		let createStatement = "CREATE TABLE IF NOT EXISTS \(table()) (\(opt.joined(separator: ", ")))"
-		if StORMdebug { LogFile.info("createStatement: \(createStatement)", logFile: "./StORMlog.txt") }
+		if StORMDebug.active { LogFile.info("createStatement: \(createStatement)", logFile: StORMDebug.location) }
 
 		do {
 			try sqlExec(createStatement)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 	}

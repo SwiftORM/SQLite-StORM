@@ -25,7 +25,7 @@ extension SQLiteStORM {
 		do {
 			return try insert(cols: keys, params: vals)
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			throw StORMError.error("\(error)")
 		}
 	}
@@ -44,7 +44,7 @@ extension SQLiteStORM {
 			let x = try execReturnID(str, params: paramString)
 			return x
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}

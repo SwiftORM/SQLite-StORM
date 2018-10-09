@@ -19,7 +19,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idname), params: [String(describing: idval)])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -31,7 +31,7 @@ extension SQLiteStORM {
 		do {
 			try exec(deleteSQL(self.table(), idName: idname), params: [String(describing: id)])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -43,7 +43,7 @@ extension SQLiteStORM {
 		do {
 			try select(whereclause: "\(idname) = :1", params: [String(describing: id)], orderby: [])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -55,7 +55,7 @@ extension SQLiteStORM {
 		do {
 			try select(whereclause: "\(idname) = :1", params: [String(describing: idval)], orderby: [])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -76,7 +76,7 @@ extension SQLiteStORM {
 		do {
 			try select(whereclause: set.joined(separator: " AND "), params: paramsString, orderby: [idname])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
@@ -99,7 +99,7 @@ extension SQLiteStORM {
 		do {
 			try select(whereclause: set.joined(separator: " AND "), params: paramsString, orderby: [idname])
 		} catch {
-			LogFile.error("Error msg: \(error)", logFile: "./StORMlog.txt")
+			LogFile.error("Error msg: \(error)", logFile: StORMDebug.location)
 			self.error = StORMError.error("\(error)")
 			throw error
 		}
