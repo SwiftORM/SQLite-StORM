@@ -75,3 +75,4 @@ Package.swift.orig
 Package.pins
 Package.resolved
 PADockerfile_build
+.DS_Store
