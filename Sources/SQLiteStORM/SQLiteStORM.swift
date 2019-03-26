@@ -138,9 +138,7 @@ open class SQLiteStORM: StORM {
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
 				results.append(statement)
 			})
-			defer {
-				self.connection.close(db)
-			}
+			self.connection.close(db)
 		} catch {
 			throw StORMError.error(errorMsg)
 		}
@@ -177,9 +175,7 @@ open class SQLiteStORM: StORM {
 //				print(statement.columnCount())
 //				results.append(statement)
 			})
-			defer {
-				self.connection.close(db)
-			}
+			self.connection.close(db)
 		} catch {
 			throw StORMError.error(errorMsg)
 		}
