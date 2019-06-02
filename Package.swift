@@ -13,6 +13,7 @@ let package = Package(
 		.package(url: "https://github.com/PerfectlySoft/Perfect-Logger.git", from: "3.0.0"),
 	],
 	targets: [
-		.target(name: "SQLiteStORM", dependencies: ["StORM", "PerfectSQLite", "PerfectLogger"])
+		.target(name: "SQLiteStORM", dependencies: ["StORM", "PerfectSQLite", "PerfectLogger"]),
+        .testTarget(name: "SQLiteStORMTests", dependencies: ["SQLiteStORM"])
 	]
 )
