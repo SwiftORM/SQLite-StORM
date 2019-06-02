@@ -60,6 +60,27 @@ class SQLiteStORMTests: XCTestCase {
 		}
 
 	}
+    
+    /* =============================================================================================
+     Types
+     ============================================================================================= */
+    func testTypes() {
+        let instance = SQLiteStORM.init()
+        XCTAssert(instance.check(Int(0), is: Int.self))
+        XCTAssert(instance.check(Float(0), is: Float.self))
+        XCTAssert(instance.check(Double(0), is: Double.self))
+        XCTAssert(instance.check(Data.init(), is: Data.self))
+        
+        XCTAssert(instance.check(Optional<Int>.some(0) as Any, is: Int.self))
+        XCTAssert(instance.check(Optional<Float>.some(0) as Any, is: Float.self))
+        XCTAssert(instance.check(Optional<Double>.some(0) as Any, is: Double.self))
+        XCTAssert(instance.check(Optional<Data>.some(.init()) as Any, is: Data.self))
+        
+        XCTAssert(instance.check(Optional<Int>.none as Any, is: Int.self))
+        XCTAssert(instance.check(Optional<Float>.none as Any, is: Float.self))
+        XCTAssert(instance.check(Optional<Double>.none as Any, is: Double.self))
+        XCTAssert(instance.check(Optional<Data>.none as Any, is: Data.self))
+    }
 
 	/* =============================================================================================
 	Save - New
@@ -331,6 +352,7 @@ class SQLiteStORMTests: XCTestCase {
 
 	static var allTests : [(String, (SQLiteStORMTests) -> () throws -> Void)] {
 		return [
+            ("testTypes", testTypes),
 			("testSaveNew", testSaveNew),
 			("testSaveUpdate", testSaveUpdate),
 			("testSaveCreate", testSaveCreate),
