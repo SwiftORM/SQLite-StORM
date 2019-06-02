@@ -71,7 +71,7 @@ open class SQLiteStORM: StORM {
 	// Returns an id
 	@discardableResult
 	func execReturnID(_ smt: String, params: [String]) throws -> Any {
-		printDebug(smt, params)
+        printDebug(smt, params)
 
 		if !SQLiteConnector.db.isEmpty {
 			self.connection.database = SQLiteConnector.db
@@ -80,11 +80,13 @@ open class SQLiteStORM: StORM {
 		do {
 			let db = try self.connection.open()
 
-			try db.execute(statement: smt, doBindings: {
-
-				(statement: SQLiteStmt) -> () in
+			try db.execute(statement: smt, doBindings: { (statement: SQLiteStmt) -> () in
 				for i in 0..<params.count {
-					try statement.bind(position: i+1, params[i])
+                    if params[i] == "nil" {
+                        try statement.bindNull(position: i+1)
+                    } else {
+                        try statement.bind(position: i+1, params[i])
+                    }
 				}
 			})
 			let x = db.lastInsertRowID()
@@ -128,13 +130,14 @@ open class SQLiteStORM: StORM {
 		do {
 			let db = try self.connection.open()
 
-			try db.forEachRow(statement: smt, doBindings: {
-
-				(statement: SQLiteStmt) -> () in
+			try db.forEachRow(statement: smt, doBindings: { (statement: SQLiteStmt) -> () in
 				for i in 0..<params.count {
-					try statement.bind(position: i+1, params[i])
+                    if params[i] == "nil" {
+                        try statement.bindNull(position: i)
+                    } else {
+                        try statement.bind(position: i+1, params[i])
+                    }
 				}
-
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
 				results.append(statement)
 			})
@@ -163,17 +166,12 @@ open class SQLiteStORM: StORM {
 		do {
 			let db = try self.connection.open()
 
-			try db.forEachRow(statement: smt, doBindings: {
-
-				(statement: SQLiteStmt) -> () in
+			try db.forEachRow(statement: smt, doBindings: { (statement: SQLiteStmt) -> () in
 				for i in 0..<params.count {
 					try statement.bind(position: i+1, params[i])
 				}
-
 			}, handleRow: {(statement: SQLiteStmt, i:Int) -> () in
 				rows.append(parseRow(statement))
-//				print(statement.columnCount())
-//				results.append(statement)
 			})
 			self.connection.close(db)
 		} catch {
@@ -278,8 +276,7 @@ open class SQLiteStORM: StORM {
                     self.check(child.value, is: UInt8.self)  ||
                     self.check(child.value, is: UInt16.self) ||
                     self.check(child.value, is: UInt32.self) ||
-                    self.check(child.value, is: UInt64.self) ||
-                    self.check(child.value, is: Data.self) {
+                    self.check(child.value, is: UInt64.self) {
 					verbage += "BLOB"
 				} else {
 					verbage += "TEXT"

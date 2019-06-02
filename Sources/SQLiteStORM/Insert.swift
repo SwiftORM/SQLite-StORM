@@ -17,10 +17,10 @@ extension SQLiteStORM {
 	public func insert(_ data: [(String, Any)]) throws -> Any {
 
 		var keys = [String]()
-		var vals = [String]()
+		var vals = [Any]()
 		for i in data {
 			keys.append(i.0)
-			vals.append(String(describing: i.1))
+			vals.append(i.1)
 		}
 		do {
 			return try insert(cols: keys, params: vals)

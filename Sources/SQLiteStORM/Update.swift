@@ -22,7 +22,16 @@ extension SQLiteStORM {
 		var paramsString = [String]()
 		var set = [String]()
 		for i in 0..<params.count {
-			paramsString.append(String(describing: params[i]))
+            let value = String(describing: params[i])
+            var paramValue: String
+            if value.contains(string: "Optional(") {
+                let start: String.Index = value.index(value.index(of: "(")!, offsetBy: 1)
+                let end: String.Index = value.lastIndex(of: ")")!
+                paramValue = String.init(value[start..<end])
+            } else {
+                paramValue = value
+            }
+            paramsString.append(paramValue)
 			set.append("\(cols[i]) = :\(i+1)")
 		}
 		paramsString.append(String(describing: idValue))
@@ -46,10 +55,10 @@ extension SQLiteStORM {
 	public func update(data: [(String, Any)], idName: String = "id", idValue: Any) throws -> Bool {
 
 		var keys = [String]()
-		var vals = [String]()
+		var vals = [Any]()
 		for i in 0..<data.count {
 			keys.append(data[i].0)
-			vals.append(String(describing: data[i].1))
+			vals.append(data[i].1)
 		}
 		do {
 			return try update(cols: keys, params: vals, idName: idName, idValue: idValue)

@@ -19,6 +19,7 @@
 import StORM
 import PerfectSQLite
 import PerfectLib
+import PerfectCSQLite3
 
 /// Supplies the parseRows method extending the main class.
 extension SQLiteStORM {
@@ -37,13 +38,17 @@ extension SQLiteStORM {
 		let this = StORMRow()
 		for i in 0..<row.columnCount() {
 			switch row.columnType(position: i) {
-			case 1:
+			case SQLITE_INTEGER:
 				this.data[row.columnName(position: i)] = row.columnInt(position: i)
-			case 2:
+			case SQLITE_FLOAT:
 				this.data[row.columnName(position: i)] = row.columnDouble(position: i)
-			case 4:
-				this.data[row.columnName(position: i)] = row.columnBlob(position: i)
-			// ignoring null, 5
+			case SQLITE_TEXT:
+				this.data[row.columnName(position: i)] = String(row.columnText(position: i))
+            case SQLITE_BLOB:
+                this.data[row.columnName(position: i)] = row.columnBlob(position: i)
+            case SQLITE_NULL:
+                this.data[row.columnName(position: i)] = nil
+                
 			default: // 3, string
 				this.data[row.columnName(position: i)] = String(row.columnText(position: i))
 			}
